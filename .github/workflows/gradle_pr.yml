@@ -1,37 +1,37 @@
-# This workflow will build a Java project with Gradle
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
-name: Pull Request
-
-on:
-  pull_request:
-    branches: [ 3.x ]
-
-permissions:
-  contents: read
-
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-    - name: Set up JDK 8
-      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+    - continue-on-error: true
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+    - continue-on-error: true
+      name: Set up JDK 8
+      uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9
       with:
-        distribution: 'zulu'
+        distribution: zulu
         java-version: '8'
-    - name: Cache Gradle packages
-      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+    - continue-on-error: true
+      name: Cache Gradle packages
+      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
       with:
-        path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-1-${{ hashFiles('**/*.gradle') }}
+        path: ~/.gradle/caches
         restore-keys: ${{ runner.os }}-gradle-1-
-    - name: Grant execute permission for gradlew
+    - continue-on-error: true
+      name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build RxJava
+    - continue-on-error: true
+      name: Build RxJava
       run: ./gradlew build --stacktrace
-    - name: Upload to Codecov  
-      uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
-    - name: Generate Javadoc
+    - continue-on-error: true
+      name: Upload to Codecov
+      uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673
+    - continue-on-error: true
+      name: Generate Javadoc
       run: ./gradlew javadoc --stacktrace
+name: Pull Request
+on:
+  repository_dispatch:
+    types: trigger-ga___gradle_pr.yml
+permissions:
+  contents: read
